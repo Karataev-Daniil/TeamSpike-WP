@@ -18,35 +18,50 @@ function rmn_custom_mime_types( $mimes ) {
 }
 add_filter( 'upload_mimes', 'rmn_custom_mime_types' );
 
-// Enqueue all styles and scripts
+// Enqueue jQuery and main styles/scripts
 function custom_enqueue_assets() {
     // Enqueue jQuery built into WordPress
     wp_enqueue_script('jquery');
 
     // Enqueue common styles
-    $styles = array(
+    $common_styles = array(
         'reset-style'       => '/css/reset.css',
         'fonts-style'       => '/css/fonts.css',
         'main-style'        => '/style.css',
+    );
+
+    foreach ($common_styles as $handle => $path) {
+        wp_enqueue_style($handle, get_template_directory_uri() . $path, array(), get_file_version($path));
+    }
+
+    // Enqueue UI Kit styles
+    $ui_kit_styles = array(
         'typography-kit-style'      => '/css/ui-kit/typography.css',
         'pallete-collors-kit-style' => '/css/ui-kit/pallete-collors.css',
     );
 
-    foreach ($styles as $handle => $path) {
+    foreach ($ui_kit_styles as $handle => $path) {
         wp_enqueue_style($handle, get_template_directory_uri() . $path, array(), get_file_version($path));
     }
 
-    // Enqueue home page specific assets
+    // Enqueue assets for the home page
     if (is_page_template('page-templates/game-sign-up.php')) {
         wp_enqueue_style('home-style', get_template_directory_uri() . '/css/home.css', array(), get_file_version('/css/home.css'));
-        wp_enqueue_script('home-script', get_template_directory_uri() . '/js/home.js', array('jquery'), null, true);
-    }
 
-    // Enqueue admin dashboard styles
-    wp_enqueue_style('custom-admin-styles', get_template_directory_uri() . '/admin-styles.css');
+        wp_enqueue_script('home-script', get_template_directory_uri() . '/js/home.js', array('jquery'), null, true);
+        wp_enqueue_script('progress-bar-script', get_template_directory_uri() . '/js/progress-bar.js', array('jquery'), null, true);
+    }
 }
 add_action('wp_enqueue_scripts', 'custom_enqueue_assets');
-add_action('admin_enqueue_scripts', 'custom_enqueue_assets');
+
+// Enqueue styles in the admin dashboard
+function enqueue_admin_styles() {
+    // Make sure to update the path to the correct file
+    wp_enqueue_style('custom-admin-styles', get_template_directory_uri() . '/admin-styles.css');
+
+    wp_enqueue_script('progress-bar-script', get_template_directory_uri() . '/js/progress-bar.js', array('jquery'), null, true);
+}
+add_action('admin_enqueue_scripts', 'enqueue_admin_styles');
 
 
 // Function to create a custom post type "Players"
@@ -182,78 +197,6 @@ function save_player_skills_meta($post_id) {
 }
 // Hook to save metadata when updating a post
 add_action('save_post', 'save_player_skills_meta');
-
-function add_custom_js() {
-    ?>
-    <script>
-        function drawProgress(input, canvasId) {
-            var canvas = document.getElementById(canvasId);
-            var ctx = canvas.getContext('2d');
-            var value = parseInt(input.value);
-            var maxValue = parseInt(input.max);
-
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Parameters for center and radius
-            var centerX = 60; // Half of the width
-            var centerY = 65; // Slightly below the middle height
-            var radius = 60; // Radius
-
-            // Angle for filling (half-circle)
-            var angle = (value / maxValue) * Math.PI;
-
-            // Color depending on the value
-            ctx.fillStyle = getColor(value, maxValue);
-
-            // Draw half-circle
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, Math.PI, Math.PI + angle, false); // Using new coordinates
-            ctx.lineTo(centerX, centerY); // Bottom
-            ctx.fill();
-            ctx.closePath();
-
-            // Draw circle
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
-            ctx.strokeStyle = '#ddd'; // Circle color
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            ctx.closePath();
-        }
-
-
-        function getColor(value, maxValue) {
-            // Change color based on the value
-            var ratio = value / maxValue;
-            var red = Math.floor((1 - ratio) * 255);
-            var green = Math.floor(ratio * 255);
-            return 'rgb(' + red + ', ' + green + ', 0)'; // Gradient from red to green
-        }
-
-        function updateValue(button, fieldId) {
-            const input = button.parentElement.querySelector('input[type="number"]');
-            let value = parseInt(input.value);
-            
-            if (button.classList.contains('plus')) {
-                value++;
-            } else if (button.classList.contains('minus')) {
-                value--;
-            }
-
-            // Limit value from 1 to 10
-            if (value < 1) value = 1;
-            if (value > 10) value = 10;
-
-            input.value = value;
-
-            // Update the Canvas
-            drawProgress(input, fieldId + '_canvas');
-        }
-    </script>
-    <?php
-}
-add_action('admin_footer', 'add_custom_js');
 
 function distribute_players($players) {
     // Create an array of teams
@@ -395,5 +338,24 @@ function get_registered_players_ids() {
     return array_map(function($registration) {
         return get_post_meta($registration->ID, 'player_id', true);
     }, $registrations);
+}
+
+// Function to calculate the average rating of a team
+function calculate_team_average_rating($team, $player_ratings) {
+    if (!is_array($team) || !isset($team['players']) || !is_array($team['players'])) {
+        return 0;
+    }
+
+    $total_rating = 0;
+    $player_count = 0;
+
+    foreach ($team['players'] as $player_id) {
+        if (isset($player_ratings[$player_id])) {
+            $total_rating += $player_ratings[$player_id];
+            $player_count++;
+        }
+    }
+
+    return $player_count > 0 ? round($total_rating / $player_count, 2) : 0;
 }
 ?>

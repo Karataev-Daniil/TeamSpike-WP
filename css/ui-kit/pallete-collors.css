@@ -1,0 +1,173 @@
+:root {
+    /* Primary colors 'gray' */
+    --gray_-6: #090909;
+    --gray_-5: #131415;
+    --gray_-4: #1E1F20;
+    --gray_-3: #313335;
+    --gray_-2: #494B4E;
+    --gray_-1: #6B6F73;
+    --gray_0: #979A9D;
+    --gray_1: #B8BABC;
+    --gray_2: #CDCECF;
+    --gray_3: #DEDFE0;
+    --gray_4: #EDEEEE;
+    --gray_5: #F6F6F7;
+    --gray_6: #FFFFFF;
+
+    /* Primary colors 'red' */
+    --red_-5: #1B0F10;
+    --red_-4: #391819;
+    --red_-3: #592022;
+    --red_-2: #822326;
+    --red_-1: #B32529;
+    --red_0: #E92228;
+    --red_1: #EE575C;
+    --red_2: #F19699;
+    --red_3: #F5C3C4;
+    --red_4: #F9E5E6;
+    --red_5: #FDF6F6;
+
+    /* Secondary сolors 'orange' */
+    --orange_-5: #241C17;
+    --orange_-4: #443226;
+    --orange_-3: #674832;
+    --orange_-2: #8F5B37;
+    --orange_-1: #BA6D37;
+    --orange_0: #EB7E33;
+    --orange_1: #F09D64;
+    --orange_2: #F3C29F;
+    --orange_3: #F7DCC9;
+    --orange_4: #FBF0E8;
+    --orange_5: #FDFAF8;
+
+
+    /* Secondary сolors 'yellow' */
+    --yellow_-5: #2C2A22;
+    --yellow_-4: #514C36;
+    --yellow_-3: #786E48;
+    --yellow_-2: #A19151;
+    --yellow_-1: #CBB352;
+    --yellow_0: #F8D64F;
+    --yellow_1: #FAE079;
+    --yellow_2: #FBEBAD;
+    --yellow_3: #FCF4D2;
+    --yellow_4: #FDFAEC;
+    --yellow_5: #FFFDF9;
+
+    /* Secondary сolors 'green' */
+    --green_-5: #0F1912;
+    --green_-4: #182F1F;
+    --green_-3: #1A4729;
+    --green_-2: #1D6033;
+    --green_-1: #187E3A;
+    --green_0: #109E3F;
+    --green_1: #49B56D;
+    --green_2: #8ECFA4;
+    --green_3: #BFE2CA;
+    --green_4: #E4F2E9;
+    --green_5: #F6FBF7;
+
+    /* Secondary сolors 'teal' */
+    --teal_-5: #101B1C;
+    --teal_-4: #193334;
+    --teal_-3: #204C4E;
+    --teal_-2: #1D686B;
+    --teal_-1: #17868A;
+    --teal_0: #0BA7AD;
+    --teal_1: #46BCC1;
+    --teal_2: #8DD4D7;
+    --teal_3: #BEE5E7;
+    --teal_4: #E4F3F4;
+    --teal_5: #F6FBFB;
+
+    /* Secondary сolors 'blue' */
+    --blue_-5: #101B1C;
+    --blue_-4: #193334;
+    --blue_-3: #204C4E;
+    --blue_-2: #1D686B;
+    --blue_-1: #17868A;
+    --blue_0: #0BA7AD;
+    --blue_1: #46BCC1;
+    --blue_2: #8DD4D7;
+    --blue_3: #BEE5E7;
+    --blue_4: #E4F3F4;
+    --blue_5: #F6FBFB;
+
+    /* Secondary сolors 'violet' */
+    --violet_-5: #15121D;
+    --violet_-4: #281E3A;
+    --violet_-3: #3A2A5B;
+    --violet_-2: #4F3385;
+    --violet_-1: #633BB5;
+    --violet_0: #7A41EC;
+    --violet_1: #9A6FF1;
+    --violet_2: #BEA5F3;
+    --violet_3: #D9CBF6;
+    --violet_4: #EFE9FA;
+    --violet_5: #FAF7FD;
+
+    /* Secondary сolors 'purple' */
+    --purple_-5: #190D18;
+    --purple_-4: #30152E;
+    --purple_-3: #4B1A48;
+    --purple_-2: #6C1B67;
+    --purple_-1: #93198B;
+    --purple_0: #BE13B3;
+    --purple_1: #CE4CC5;
+    --purple_2: #DE90D8;
+    --purple_3: #EABFE7;
+    --purple_4: #F5E4F4;
+    --purple_5: #FBF6FB;
+
+    /* Secondary сolors 'pink' */
+    --pink_-5: #1A0E13;
+    --pink_-4: #361623;
+    --pink_-3: #571933;
+    --pink_-2: #7D1D43;
+    --pink_-1: #AA1B54;
+    --pink_0: #DF1666;
+    --pink_1: #E74E8B;
+    --pink_2: #ED91B6;
+    --pink_3: #F2C0D4;
+    --pink_4: #F9E4ED;
+    --pink_5: #FDF7F9;
+
+    /* Feedback colors 'success' */
+    --success_-5: #171B13;
+    --success_-4: #26321C;
+    --success_-3: #354924;
+    --success_-2: #426425;
+    --success_-1: #4D8022;
+    --success_0: #579E1A;
+    --success_1: #7FB551;
+    --success_2: #AFCF93;
+    --success_3: #D1E3C2;
+    --success_4: #ECF2E5;
+    --success_5: #F8FBF7;
+
+    /* Feedback colors 'warning' */
+    --warning_-5: #221D17;
+    --warning_-4: #413323;
+    --warning_-3: #624A2E;
+    --warning_-2: #875E2F;
+    --warning_-1: #AF732C;
+    --warning_0: #DB8624;
+    --warning_1: #E4A359;
+    --warning_2: #ECC599;
+    --warning_3: #F3DDC5;
+    --warning_4: #FAF0E7;
+    --warning_5: #FDFAF7;
+
+    /* Feedback colors 'danger' */
+    --danger_-5: #1D1412;
+    --danger_-4: #3A211D;
+    --danger_-3: #5C2C25;
+    --danger_-2: #7F372B;
+    --danger_-1: #AC3E2D;
+    --danger_0: #DD442C;
+    --danger_1: #E5715F;
+    --danger_2: #ECA69C;
+    --danger_3: #F2CCC6;
+    --danger_4: #F9EAE7;
+    --danger_5: #FDF8F8;
+}

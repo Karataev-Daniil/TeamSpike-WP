@@ -1,0 +1,73 @@
+.form-table tbody {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+.form-table tr {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid grey;
+    align-items: center;
+    overflow: hidden;
+    padding: 0 40px;
+}
+.form-table th {
+    padding: 0;
+}
+.form-table td {
+    padding: 0;
+    margin-bottom: 0;
+}
+.form-table .custom-number-input {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    width: 120px;
+    height: 65px;
+    position: relative;
+    margin-bottom: 0;
+}
+.form-table .custom-number-input button {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    position: absolute;
+    z-index: 2;
+}
+.form-table .custom-number-input button.minus {
+    font-size: 30px;
+    left: -40px;
+}
+.form-table .custom-number-input button.plus {
+    font-size: 30px;
+    right: -40px;
+}
+.form-table .custom-number-input input {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0px 0px 0 10px;
+    color: #000;
+    border: none;
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    text-align: center;
+    pointer-events: none;
+}
+
+.form-table td canvas {
+    width: 100%;
+    z-index: 1;
+    position: absolute;
+}
+.form-table td input {
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}

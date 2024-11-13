@@ -18,70 +18,53 @@ function rmn_custom_mime_types( $mimes ) {
 }
 add_filter( 'upload_mimes', 'rmn_custom_mime_types' );
 
-// Include jQuery built into WordPress
+// Enqueue all styles and scripts
 function custom_enqueue_assets() {
-    // Enqueue jQuery
+    // Enqueue jQuery built into WordPress
     wp_enqueue_script('jquery');
 
-    // Connect common styles
-    $common_styles = array(
+    // Enqueue common styles
+    $styles = array(
         'reset-style'       => '/css/reset.css',
         'fonts-style'       => '/css/fonts.css',
         'main-style'        => '/style.css',
-    );
-
-    foreach ($common_styles as $handle => $path) {
-        wp_enqueue_style($handle, get_template_directory_uri() . $path, array(), get_file_version($path));
-    }
-
-    // Enqueue UI Kit styles
-    $ui_kit_styles = array(
         'typography-kit-style'      => '/css/ui-kit/typography.css',
         'pallete-collors-kit-style' => '/css/ui-kit/pallete-collors.css',
     );
 
-    foreach ($ui_kit_styles as $handle => $path) {
+    foreach ($styles as $handle => $path) {
         wp_enqueue_style($handle, get_template_directory_uri() . $path, array(), get_file_version($path));
     }
 
-    // Enqueue home page assets
+    // Enqueue home page specific assets
     if (is_page_template('page-templates/game-sign-up.php')) {
-        // Подключаем стили и скрипты для главной страницы
         wp_enqueue_style('home-style', get_template_directory_uri() . '/css/home.css', array(), get_file_version('/css/home.css'));
-        // Например, вы можете также подключить JavaScript для главной страницы
         wp_enqueue_script('home-script', get_template_directory_uri() . '/js/home.js', array('jquery'), null, true);
     }
 
-    // Enqueue styles and scripts for 404 error, search, blog
-    if (is_404()) {
-        wp_enqueue_style('error-404-style', get_template_directory_uri() . '/css/template/error-404.css', array(), get_file_version('/css/template/error-404.css'));
-    }
-}
-add_action('wp_enqueue_scripts', 'custom_enqueue_assets');
-
-// Подключение стилей в админке
-function enqueue_admin_styles() {
-    // Убедитесь, что вы изменили путь к файлу на правильный
+    // Enqueue admin dashboard styles
     wp_enqueue_style('custom-admin-styles', get_template_directory_uri() . '/admin-styles.css');
 }
-add_action('admin_enqueue_scripts', 'enqueue_admin_styles');
+add_action('wp_enqueue_scripts', 'custom_enqueue_assets');
+add_action('admin_enqueue_scripts', 'custom_enqueue_assets');
 
-// Функция для создания кастомного типа записи "Игроки"
+
+// Function to create a custom post type "Players"
 function create_custom_post_type_players() {
     $labels = array(
-        'name'               => 'Игроки',
-        'singular_name'      => 'Игрок',
-        'menu_name'          => 'Игроки',
-        'name_admin_bar'     => 'Игрок',
-        'add_new'            => 'Добавить нового',
-        'add_new_item'       => 'Добавить нового игрока',
-        'new_item'           => 'Новый игрок',
-        'edit_item'          => 'Редактировать игрока',
-        'view_item'          => 'Просмотреть игрока',
-        'all_items'          => 'Все игроки',
-        'search_items'       => 'Поиск игроков',
-        'not_found'          => 'Игроков не найдено',
-        'not_found_in_trash' => 'В корзине игроков не найдено',
+        'name'               => 'Players',
+        'singular_name'      => 'Player',
+        'menu_name'          => 'Players',
+        'name_admin_bar'     => 'Player',
+        'add_new'            => 'Add New',
+        'add_new_item'       => 'Add New Player',
+        'new_item'           => 'New Player',
+        'edit_item'          => 'Edit Player',
+        'view_item'          => 'View Player',
+        'all_items'          => 'All Players',
+        'search_items'       => 'Search Players',
+        'not_found'          => 'No players found',
+        'not_found_in_trash' => 'No players found in Trash',
     );
 
     $args = array(
@@ -97,29 +80,29 @@ function create_custom_post_type_players() {
         'hierarchical'       => false,
         'menu_position'      => 5,
         'supports'           => array( 'title' ),
-        'menu_icon'          => 'dashicons-groups', // Иконка в меню админки
+        'menu_icon'          => 'dashicons-groups', // Icon in the admin menu
     );
 
     register_post_type( 'players', $args );
 }
-// Хук для инициализации кастомного типа записи
+// Hook to initialize the custom post type
 add_action('init', 'create_custom_post_type_players');
-
-// Добавляем метабокс для отображения таблицы с оценками
-add_action('add_meta_boxes', 'add_player_skills_metabox');
 
 function add_player_skills_metabox() {
     add_meta_box(
-        'player_skills_metabox', // ID метабокса
-        'Оценка навыков волейболиста', // Заголовок метабокса
-        'render_player_skills_metabox', // Функция для отображения содержимого
-        'players', // Тип записи
-        'normal', // Место размещения
-        'high' // Приоритет
+        'player_skills_metabox',
+        'Volleyball Player Skills Rating',
+        'render_player_skills_metabox',
+        'players',
+        'normal',
+        'high'
     );
 }
+// Add the metabox to display the rating table
+add_action('add_meta_boxes', 'add_player_skills_metabox');
+
 function render_player_skills_metabox($post) {
-    // Получаем значения полей
+    // Get the field values
     $attack_power = get_post_meta($post->ID, 'attack_power', true);
     $accuracy = get_post_meta($post->ID, 'accuracy', true);
     $blocking = get_post_meta($post->ID, 'blocking', true);
@@ -128,26 +111,26 @@ function render_player_skills_metabox($post) {
     $serve = get_post_meta($post->ID, 'serve', true);
     $stamina = get_post_meta($post->ID, 'stamina', true);
 
-    // Начало таблицы
+    // Start of the table
     echo '<table class="form-table">';
     
-    // Сила удара
-    render_skill_row('attack_power', 'Сила удара', $attack_power);
+    // Attack power
+    render_skill_row('attack_power', 'Attack Power', $attack_power);
     
-    // Точность
-    render_skill_row('accuracy', 'Точность', $accuracy);
+    // Accuracy
+    render_skill_row('accuracy', 'Accuracy', $accuracy);
     
-    // Блокировка
-    render_skill_row('blocking', 'Блокировка', $blocking);
+    // Blocking
+    render_skill_row('blocking', 'Blocking', $blocking);
     
-    // Прыжок
-    render_skill_row('jumping', 'Прыжок', $jumping);
+    // Jumping
+    render_skill_row('jumping', 'Jumping', $jumping);
     
-    // Защита
-    render_skill_row('defense', 'Защита', $defense);
+    // Defense
+    render_skill_row('defense', 'Defense', $defense);
     
-    // Подача
-    render_skill_row('serve', 'Подача', $serve);
+    // Serve
+    render_skill_row('serve', 'Serve', $serve);
 
     echo '</table>';
 }
@@ -172,9 +155,9 @@ function render_skill_row($field_id, $label, $value) {
     </script>';
 }
 
-// Сохранение данных метабокса
+// Saving metabox data
 function save_player_skills_meta($post_id) {
-    // Проверяем, есть ли данные для сохранения
+    // Check if there is data to save
     if (isset($_POST['attack_power'])) {
         update_post_meta($post_id, 'attack_power', intval($_POST['attack_power']));
     }
@@ -197,11 +180,8 @@ function save_player_skills_meta($post_id) {
         update_post_meta($post_id, 'stamina', intval($_POST['stamina']));
     }
 }
-
-// Хук для сохранения метаданных при обновлении записи
+// Hook to save metadata when updating a post
 add_action('save_post', 'save_player_skills_meta');
-
-add_action('admin_footer', 'add_custom_js');
 
 function add_custom_js() {
     ?>
@@ -212,31 +192,31 @@ function add_custom_js() {
             var value = parseInt(input.value);
             var maxValue = parseInt(input.max);
 
-            // Очищаем canvas
+            // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Параметры центра и радиуса
-            var centerX = 60; // Половина ширины
-            var centerY = 65; // Чуть ниже середины высоты
-            var radius = 60; // Радиус
+            // Parameters for center and radius
+            var centerX = 60; // Half of the width
+            var centerY = 65; // Slightly below the middle height
+            var radius = 60; // Radius
 
-            // Угол для заполнения (полукруг)
+            // Angle for filling (half-circle)
             var angle = (value / maxValue) * Math.PI;
 
-            // Цвет в зависимости от значения
+            // Color depending on the value
             ctx.fillStyle = getColor(value, maxValue);
 
-            // Рисуем полукруг
+            // Draw half-circle
             ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, Math.PI, Math.PI + angle, false); // Используем новые координаты
-            ctx.lineTo(centerX, centerY); // Снизу
+            ctx.arc(centerX, centerY, radius, Math.PI, Math.PI + angle, false); // Using new coordinates
+            ctx.lineTo(centerX, centerY); // Bottom
             ctx.fill();
             ctx.closePath();
 
-            // Рисуем окружность
+            // Draw circle
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
-            ctx.strokeStyle = '#ddd'; // Цвет окружности
+            ctx.strokeStyle = '#ddd'; // Circle color
             ctx.lineWidth = 2;
             ctx.stroke();
             ctx.closePath();
@@ -244,11 +224,11 @@ function add_custom_js() {
 
 
         function getColor(value, maxValue) {
-            // Меняем цвет в зависимости от значения
+            // Change color based on the value
             var ratio = value / maxValue;
             var red = Math.floor((1 - ratio) * 255);
             var green = Math.floor(ratio * 255);
-            return 'rgb(' + red + ', ' + green + ', 0)'; // Градиент от красного к зеленому
+            return 'rgb(' + red + ', ' + green + ', 0)'; // Gradient from red to green
         }
 
         function updateValue(button, fieldId) {
@@ -261,31 +241,32 @@ function add_custom_js() {
                 value--;
             }
 
-            // Ограничиваем значение от 1 до 10
+            // Limit value from 1 to 10
             if (value < 1) value = 1;
             if (value > 10) value = 10;
 
             input.value = value;
 
-            // Обновляем Canvas
+            // Update the Canvas
             drawProgress(input, fieldId + '_canvas');
         }
     </script>
     <?php
 }
+add_action('admin_footer', 'add_custom_js');
 
 function distribute_players($players) {
-    // Создаем массив команд
+    // Create an array of teams
     $teams = array(
         'Team A' => array('players' => array(), 'total_rating' => 0),
         'Team B' => array('players' => array(), 'total_rating' => 0),
         'Team C' => array('players' => array(), 'total_rating' => 0),
     );
 
-    // Массив для отслеживания предпочтений
+    // Array to track preferences
     $preferences = array();
 
-    // Сначала сортируем игроков по их общему рейтингу
+    // First, sort players by their total rating
     usort($players, function($a, $b) {
         $a_rating = intval(get_post_meta($a->ID, 'blocking', true)) +
                     intval(get_post_meta($a->ID, 'defense', true)) +
@@ -301,27 +282,27 @@ function distribute_players($players) {
                     intval(get_post_meta($b->ID, 'jumping', true)) +
                     intval(get_post_meta($b->ID, 'accuracy', true));
 
-        return $b_rating - $a_rating; // Сортируем по убыванию
+        return $b_rating - $a_rating; // Sort by descending order
     });
 
-    // Обрабатываем предпочтения
+    // Handle preferences
     foreach ($players as $player) {
-        $preferred_player_id = get_post_meta($player->ID, 'preferred_player', true); // Получаем предпочтение
+        $preferred_player_id = get_post_meta($player->ID, 'preferred_player', true); // Get preference
 
         if ($preferred_player_id) {
-            $preferences[$player->ID] = intval($preferred_player_id); // Сохраняем предпочтение
+            $preferences[$player->ID] = intval($preferred_player_id); // Save the preference
         }
     }
 
-    // Распределяем игроков по командам
-    $assigned_players = array(); // Массив для отслеживания назначенных игроков
+    // Distribute players into teams
+    $assigned_players = array(); // Array to track assigned players
 
     foreach ($players as $player) {
         if (in_array($player->ID, $assigned_players)) {
-            continue; // Пропускаем уже назначенных игроков
+            continue; // Skip already assigned players
         }
 
-        // Получаем общую оценку игрока
+        // Get the player's total rating
         $player_rating = intval(get_post_meta($player->ID, 'blocking', true)) +
                          intval(get_post_meta($player->ID, 'defense', true)) +
                          intval(get_post_meta($player->ID, 'serve', true)) +
@@ -329,7 +310,7 @@ function distribute_players($players) {
                          intval(get_post_meta($player->ID, 'jumping', true)) +
                          intval(get_post_meta($player->ID, 'accuracy', true));
 
-        // Ищем команду с наименьшей общей оценкой
+        // Find the team with the smallest total rating
         $selected_team = array_reduce(array_keys($teams), function($carry, $team_name) use ($teams, $player_rating) {
             if ($carry === null || $teams[$carry]['total_rating'] > $teams[$team_name]['total_rating'] + $player_rating) {
                 return $team_name;
@@ -337,18 +318,18 @@ function distribute_players($players) {
             return $carry;
         });
 
-        // Добавляем ID игрока в выбранную команду
+        // Add player ID to the selected team
         $teams[$selected_team]['players'][] = $player->ID;
         $teams[$selected_team]['total_rating'] += $player_rating;
-        $assigned_players[] = $player->ID; // Отмечаем игрока как назначенного
+        $assigned_players[] = $player->ID; // Mark the player as assigned
 
-        // Проверяем, есть ли игрок, который хочет быть с этим игроком
+        // Check if there's a player who wants to be with this player
         if (isset($preferences[$player->ID])) {
             $preferred_player_id = $preferences[$player->ID];
 
-            // Проверяем, что предпочтительный игрок еще не назначен
+            // Check if the preferred player is not yet assigned
             if (!in_array($preferred_player_id, $assigned_players)) {
-                // Добавляем предпочтительного игрока в ту же команду
+                // Add the preferred player to the same team
                 $preferred_player_rating = intval(get_post_meta($preferred_player_id, 'blocking', true)) +
                                            intval(get_post_meta($preferred_player_id, 'defense', true)) +
                                            intval(get_post_meta($preferred_player_id, 'serve', true)) +
@@ -358,40 +339,26 @@ function distribute_players($players) {
 
                 $teams[$selected_team]['players'][] = $preferred_player_id;
                 $teams[$selected_team]['total_rating'] += $preferred_player_rating;
-                $assigned_players[] = $preferred_player_id; // Отмечаем предпочтительного игрока как назначенного
+                $assigned_players[] = $preferred_player_id; // Mark the preferred player as assigned
             }
         }
     }
 
-    return $teams; // Возвращаем распределенные команды
+    return $teams; // Return the distributed teams
 }
 
-// Проверка, играл ли игрок в субботу
+// Check if the player participated on Saturday
 function check_player_participation($player_id) {
-    $current_time = current_time('timestamp');
-    $saturday_time = strtotime('this Saturday 18:00');
-
-    // Если текущий момент позже субботы 18:00
-    if ($current_time > $saturday_time) {
-        $played = get_post_meta($player_id, 'played_saturday', true);
-        return $played === 'yes';
+    if (current_time('timestamp') > strtotime('this Saturday 18:00')) {
+        return get_post_meta($player_id, 'played_saturday', true) === 'yes';
     }
-
     return false;
 }
 
-// Хук для установки метки об участии игрока в субботу
+// Mark player participation after Saturday 18:00
 function mark_player_participation() {
-    $current_time = current_time('timestamp');
-    $saturday_time = strtotime('this Saturday 18:00');
-
-    if ($current_time > $saturday_time) {
-        $args = array(
-            'post_type' => 'players',
-            'posts_per_page' => -1,
-        );
-        $players = get_posts($args);
-
+    if (current_time('timestamp') > strtotime('this Saturday 18:00')) {
+        $players = get_posts(array('post_type' => 'players', 'posts_per_page' => -1));
         foreach ($players as $player) {
             update_post_meta($player->ID, 'played_saturday', 'yes');
         }
@@ -399,14 +366,13 @@ function mark_player_participation() {
 }
 add_action('wp_loaded', 'mark_player_participation');
 
-// Функция для сброса зарегистрированных игроков и составов
+// Reset registered players and teams
 function reset_registered_players_and_teams() {
-    // Очистка массива зарегистрированных игроков
     update_option('registered_players', array());
-    // Удаление текущих составов
     delete_option('current_teams');
 }
 
+// Schedule weekly reset
 function schedule_reset() {
     if (!wp_next_scheduled('weekly_player_reset')) {
         wp_schedule_event(strtotime('next Sunday 10:00'), 'weekly', 'weekly_player_reset');
@@ -414,10 +380,7 @@ function schedule_reset() {
 }
 add_action('wp', 'schedule_reset');
 
-
-// Подключение функции сброса к хуку
-add_action('weekly_player_reset', 'reset_registered_players_and_teams');
-
+// Add player to registration list
 function add_player_to_registration($player_id) {
     $registered_players = get_option('registered_players', array());
     if (!in_array($player_id, $registered_players)) {
@@ -426,19 +389,11 @@ function add_player_to_registration($player_id) {
     }
 }
 
+// Get registered player IDs
 function get_registered_players_ids() {
-    
-    $args = array(
-        'post_type' => 'registration', // Замените на ваш пост-тип регистрации
-        'posts_per_page' => -1,
-    );
-    $registrations = get_posts($args);
-    
-    $registered_ids = array();
-    foreach ($registrations as $registration) {
-        $registered_ids[] = get_post_meta($registration->ID, 'player_id', true); // Предполагаем, что ID игрока сохраняется в метаполе
-    }
-    
-    return $registered_ids;
+    $registrations = get_posts(array('post_type' => 'registration', 'posts_per_page' => -1));
+    return array_map(function($registration) {
+        return get_post_meta($registration->ID, 'player_id', true);
+    }, $registrations);
 }
 ?>

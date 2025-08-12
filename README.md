@@ -1,63 +1,54 @@
 # TeamSpike-WP
 
-**TeamSpike-WP** — это кастомная тема WordPress, разработанная специально для проекта TeamSpike.  
-Тема ориентирована на масштабируемость и расширяемость, включая кастомные типы записей, удобные вспомогательные функции и продуманную настройку фронтенда.
+**TeamSpike-WP** is a custom WordPress theme developed specifically for the TeamSpike project.  
+The theme is designed for scalability and extensibility, featuring custom post types, helpful utility functions, and a well-structured frontend setup.
 
 ---
 
-## 📁 Структура проекта
+## 📁 Project Structure
 
 .
-├── front-page.php # Шаблон главной страницы
-├── functions.php # Основной файл подключения модулей темы
+├── front-page.php # Main page template
+├── functions.php # Core theme modules loader
 ├── includes/
-│ ├── assets.php # Регистрация и подключение стилей и скриптов
-│ ├── custom-post-types.php # Определение кастомных типов записей
-│ ├── helpers.php # Вспомогательные функции для шаблонов
-│ ├── theme-setup.php # Инициализация темы и поддержка возможностей WordPress
-
-yaml
-Copy
-Edit
+│ ├── assets.php # Registration and enqueue of styles and scripts
+│ ├── custom-post-types.php # Definition of custom post types
+│ ├── helpers.php # Helper functions for templates
+│ ├── theme-setup.php # Theme initialization and WordPress features support
 
 ---
 
-## ⚙️ Основные возможности
+## ⚙️ Key Features
 
-- **Кастомные типы записей**  
-  Определяются в `includes/custom-post-types.php`. Позволяют расширять стандартный функционал WordPress для управления специфическими сущностями проекта.
+- **Custom Post Types**  
+  Defined in `includes/custom-post-types.php`, allowing you to extend WordPress standard functionality to manage project-specific entities.
 
-- **Подключение стилей и скриптов**  
-  В `includes/assets.php` осуществляется регистрация и подключение всех необходимых CSS и JS файлов.
+- **Styles and Scripts Management**  
+  All necessary CSS and JS files are registered and enqueued in `includes/assets.php`.
 
-- **Вспомогательные функции**  
-  Файл `includes/helpers.php` содержит утилитарные функции, которые упрощают работу с шаблонами и функционалом темы.
+- **Helper Functions**  
+  Utility functions located in `includes/helpers.php` simplify working with templates and theme features.
 
-- **Настройка темы**  
-  В `includes/theme-setup.php` задаются базовые параметры темы: поддержка миниатюр, меню, форматов записей и другие настройки, обеспечивающие корректную работу WordPress с темой.
+- **Theme Setup**  
+  Basic theme settings such as thumbnail support, menus, post formats, and other WordPress features are configured in `includes/theme-setup.php`.
 
 ---
 
-## 🚀 Установка
+## 🚀 Installation
 
-1. Клонируйте репозиторий в папку с темами вашего WordPress:
+1. Clone the repository into your WordPress themes directory:
 
 ```bash
 git clone https://github.com/Karataev-Daniil/TeamSpike-WP.git
-Активируйте тему через административную панель WordPress:
+Activate the theme from the WordPress admin dashboard:
 
-Copy
-Edit
-Внешний вид → Темы → TeamSpike-WP → Активировать
-🛠 Требования
-WordPress версии 6.x
+Appearance → Themes → TeamSpike-WP → Activate
+🛠 Requirements
+WordPress version 6.x
 
-PHP версии 7.4+
+PHP version 7.4+
 
-MySQL версии 5.7+ или MariaDB 10.3+
+MySQL version 5.7+ or MariaDB 10.3+
 
-📄 Лицензия
-Проект распространяется под лицензией MIT.
-
-Copy
-Edit
+📄 License
+This project is licensed under the MIT License.

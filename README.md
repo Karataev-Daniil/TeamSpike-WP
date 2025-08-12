@@ -7,14 +7,16 @@ The theme is designed for scalability and extensibility, featuring custom post t
 
 ## 📁 Project Structure
 
-.
-├── front-page.php # Main page template
-├── functions.php # Core theme modules loader
+
+```
+├── front-page.php             # Main page template
+├── functions.php              # Core theme modules loader
 ├── includes/
-│ ├── assets.php # Registration and enqueue of styles and scripts
-│ ├── custom-post-types.php # Definition of custom post types
-│ ├── helpers.php # Helper functions for templates
-│ ├── theme-setup.php # Theme initialization and WordPress features support
+│   ├── assets.php             # Registration and enqueue of styles and scripts
+│   ├── custom-post-types.php  # Definition of custom post types
+│   ├── helpers.php            # Helper functions for templates
+│   ├── theme-setup.php        # Theme initialization and WordPress features support
+```
 
 ---
 

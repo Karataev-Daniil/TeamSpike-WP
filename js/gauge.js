@@ -24,7 +24,6 @@
 
         ctx.clearRect(0, 0, width, height);
 
-        // Фоновая дуга
         ctx.beginPath();
         ctx.arc(cx, cy, radius / 2, Math.PI, 0, false);
         ctx.lineWidth = lineWidth;
@@ -32,7 +31,6 @@
         ctx.stroke();
         ctx.closePath();
 
-        // Заполненная дуга
         let percent = Math.min(Math.max(value / maxValue, 0), 1);
         let endAngle = Math.PI + percent * Math.PI;
         let color = getColorByValue(value);
@@ -78,7 +76,6 @@
         requestAnimationFrame(step);
     }
 
-    // Автоматическая инициализация для canvas с классом admin-gauge и data-value
     document.addEventListener("DOMContentLoaded", function() {
         document.querySelectorAll('canvas.admin-gauge').forEach(canvas => {
             const val = parseFloat(canvas.dataset.value);
@@ -88,7 +85,6 @@
         });
     });
 
-    // Чтобы можно было использовать из других скриптов
     window.drawGauge = drawGauge;
     window.animateGauge = animateGauge;
 })();
